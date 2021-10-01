@@ -1,27 +1,55 @@
 package com.gmail.dev.surovtsev.yaroslav;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
-import javax.servlet.annotation.*;
 
-@WebServlet(name = "helloServlet", value = "/hello-servlet")
 public class QuestionnaireServlet extends HttpServlet {
-    private String message;
+    private final Map<String, Map<String, Integer>> statistics = new HashMap<>();
 
-    public void init() {
-        message = "Hello World!";
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String firstname = req.getParameter("firstname");
+        String lastname = req.getParameter("lastname");
+        int age;
+        try {
+            age = Integer.parseInt(req.getParameter("age"));
+        } catch (NumberFormatException e) {
+            age = 0;
+        }
+        String q1 = req.getParameter("question1");
+        String q2 = req.getParameter("question2");
+
+        addToStatistics("q1", q1);
+        addToStatistics("q2", q2);
+
+        HttpSession session = req.getSession(true);
+        session.setAttribute("statistics", statistics);
+        resp.sendRedirect("statistics.jsp");
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/html");
-
-        // Hello
-        PrintWriter out = response.getWriter();
-        out.println("<html><body>");
-        out.println("<h1>" + message + "</h1>");
-        out.println("</body></html>");
+    private void addToStatistics(String questionName, String questionResult) {
+        if (questionResult == null) {
+            return;
+        }
+        Map<String, Integer> q1Value = statistics.get(questionName);
+        if (q1Value == null) {
+            statistics.put(questionName, new HashMap<>());
+            q1Value = statistics.get(questionName);
+        }
+        Integer value = q1Value.get(questionResult);
+        if (value == null) {
+            q1Value.put(questionResult, 1);
+        } else {
+            q1Value.put(questionResult, value + 1);
+        }
+        statistics.put(questionName, q1Value);
     }
 
-    public void destroy() {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.sendRedirect("index.jsp");
     }
 }
