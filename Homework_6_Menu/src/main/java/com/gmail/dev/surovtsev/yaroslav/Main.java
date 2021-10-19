@@ -25,24 +25,29 @@ public class Main {
         menuDAO.delete(menu4);
         menu3.setPrice(100.10);
         menuDAO.update(menu3);
+
+        System.out.println("=====getId");
         Optional<Menu> dishFromDB1 = menuDAO.get(menu1.getId());
         dishFromDB1.ifPresent(System.out::println);
+
+        System.out.println("=====getId");
         Optional<Menu> dishFromDB2 = menuDAO.get(menu4.getId());
         dishFromDB2.ifPresent(System.out::println);
 
+        System.out.println("=====getAll");
         List<Menu> list1 = menuDAO.getAll();
         list1.forEach(System.out::println);
-        System.out.println();
 
+        System.out.println("=====isDiscountAvailable");
         List<Menu> list2 = menuDAO.getAll(true);
         list2.forEach(System.out::println);
-        System.out.println();
 
+        System.out.println("=====price between");
         List<Menu> list3 = menuDAO.getAll(100, 160);
         list3.forEach(System.out::println);
 
+        System.out.println("=====< 1 kg");
         List<Menu> list4 = menuDAO.getAll(1.000);
         list4.forEach(System.out::println);
-
     }
 }

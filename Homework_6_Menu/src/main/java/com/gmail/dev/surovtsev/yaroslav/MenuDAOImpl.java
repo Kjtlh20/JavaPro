@@ -1,6 +1,7 @@
 package com.gmail.dev.surovtsev.yaroslav;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,16 +16,7 @@ public class MenuDAOImpl implements MenuDAO {
 
     @Override
     public Optional<Menu> get(long id) {
-        Optional<Menu> result = Optional.empty();
-        em.getTransaction().begin();
-        try {
-            Menu menu = new Menu();
-            menu.setId(id);
-            result = Optional.ofNullable(em.find(Menu.class, menu));
-        } catch (Exception ex) {
-            em.getTransaction().rollback();
-        }
-        return result;
+        return Optional.ofNullable(em.find(Menu.class, id));
     }
 
     @Override
@@ -53,10 +45,16 @@ public class MenuDAOImpl implements MenuDAO {
 
     @Override
     public List<Menu> getAll(double weightTo) {
-        Query query = em.createQuery("SELECT m FROM Menu m HAVING SUM(m.weight) < :weightTo", Menu.class);
-        query.setParameter("weightTo", weightTo);
-        List<Menu> list = (List<Menu>) query.getResultList();
-        return list;
+        List<Menu> list = getAll();
+        List<Menu> resList = new ArrayList<>();
+        double currWeight = 0.0;
+        for (Menu dish: list) {
+            currWeight += dish.getWeight();
+            if (currWeight < weightTo) {
+                resList.add(dish);
+            }
+        }
+        return resList;
     }
 
     @Override
