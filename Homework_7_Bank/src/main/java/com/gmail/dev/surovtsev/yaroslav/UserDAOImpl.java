@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Optional;
 
-public class UserDAOImpl implements UserDAO {
+public class UserDAOImpl implements AbstractDAO<User> {
     private EntityManagerFactory emf;
     private EntityManager em;
 

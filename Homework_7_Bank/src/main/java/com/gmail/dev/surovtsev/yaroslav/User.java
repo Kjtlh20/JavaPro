@@ -14,7 +14,7 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Account> accounts = new HashSet<>();
 
     public User() {

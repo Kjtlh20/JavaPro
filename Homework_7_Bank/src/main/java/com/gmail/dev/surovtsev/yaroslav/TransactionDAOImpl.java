@@ -4,32 +4,32 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Optional;
 
-public class CurrencyDAOImpl implements AbstractDAO<Currency> {
+public class TransactionDAOImpl implements AbstractDAO<Transaction> {
     private EntityManagerFactory emf;
     private EntityManager em;
 
-    public CurrencyDAOImpl() {
+    public TransactionDAOImpl() {
         this.emf = Persistence.createEntityManagerFactory("Bank");
         this.em = emf.createEntityManager();
     }
 
     @Override
-    public Optional<Currency> get(Long id) {
-        return Optional.ofNullable(em.find(Currency.class, id));
+    public Optional<Transaction> get(Long id) {
+        return Optional.ofNullable(em.find(Transaction.class, id));
     }
 
     @Override
-    public List<Currency> getAll() {
-        TypedQuery<Currency> query = em.createQuery("SELECT c FROM Currency c", Currency.class);
-        List<Currency> resultList = query.getResultList();
+    public List<Transaction> getAll() {
+        TypedQuery<Transaction> query = em.createQuery("SELECT t FROM Transaction t", Transaction.class);
+        List<Transaction> resultList = query.getResultList();
         return resultList;
     }
 
     @Override
-    public void add(Currency currency) {
+    public void add(Transaction transaction) {
         em.getTransaction().begin();
         try {
-            em.persist(currency);
+            em.persist(transaction);
             em.getTransaction().commit();
         } catch (Exception ex) {
             em.getTransaction().rollback();
@@ -37,10 +37,10 @@ public class CurrencyDAOImpl implements AbstractDAO<Currency> {
     }
 
     @Override
-    public void update(Currency currency) {
+    public void update(Transaction transaction) {
         em.getTransaction().begin();
         try {
-            em.merge(currency);
+            em.merge(transaction);
             em.getTransaction().commit();
         } catch (Exception ex) {
             em.getTransaction().rollback();
@@ -48,15 +48,15 @@ public class CurrencyDAOImpl implements AbstractDAO<Currency> {
     }
 
     @Override
-    public void delete(Currency currency) {
-        Currency currencyFromDB = em.getReference(Currency.class, currency.getId());
-        if (currency == null) {
+    public void delete(Transaction transaction) {
+        Transaction transactionFromDB = em.getReference(Transaction.class, transaction.getId());
+        if (transactionFromDB == null) {
             return;
         }
 
         em.getTransaction().begin();
         try {
-            em.remove(currency);
+            em.remove(transaction);
             em.getTransaction().commit();
         } catch (Exception ex) {
             em.getTransaction().rollback();

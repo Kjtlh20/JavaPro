@@ -4,32 +4,32 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Optional;
 
-public class CurrencyDAOImpl implements AbstractDAO<Currency> {
+public class RateDAOImpl implements AbstractDAO<Rate> {
     private EntityManagerFactory emf;
     private EntityManager em;
 
-    public CurrencyDAOImpl() {
+    public RateDAOImpl() {
         this.emf = Persistence.createEntityManagerFactory("Bank");
         this.em = emf.createEntityManager();
     }
 
     @Override
-    public Optional<Currency> get(Long id) {
-        return Optional.ofNullable(em.find(Currency.class, id));
+    public Optional<Rate> get(Long id) {
+        return Optional.ofNullable(em.find(Rate.class, id));
     }
 
     @Override
-    public List<Currency> getAll() {
-        TypedQuery<Currency> query = em.createQuery("SELECT c FROM Currency c", Currency.class);
-        List<Currency> resultList = query.getResultList();
+    public List<Rate> getAll() {
+        TypedQuery<Rate> query = em.createQuery("SELECT r FROM Rate r", Rate.class);
+        List<Rate> resultList = query.getResultList();
         return resultList;
     }
 
     @Override
-    public void add(Currency currency) {
+    public void add(Rate rate) {
         em.getTransaction().begin();
         try {
-            em.persist(currency);
+            em.persist(rate);
             em.getTransaction().commit();
         } catch (Exception ex) {
             em.getTransaction().rollback();
@@ -37,10 +37,10 @@ public class CurrencyDAOImpl implements AbstractDAO<Currency> {
     }
 
     @Override
-    public void update(Currency currency) {
+    public void update(Rate rate) {
         em.getTransaction().begin();
         try {
-            em.merge(currency);
+            em.merge(rate);
             em.getTransaction().commit();
         } catch (Exception ex) {
             em.getTransaction().rollback();
@@ -48,15 +48,15 @@ public class CurrencyDAOImpl implements AbstractDAO<Currency> {
     }
 
     @Override
-    public void delete(Currency currency) {
-        Currency currencyFromDB = em.getReference(Currency.class, currency.getId());
-        if (currency == null) {
+    public void delete(Rate rate) {
+        Rate rateFromDB = em.getReference(Rate.class, rate.getId());
+        if (rateFromDB == null) {
             return;
         }
 
         em.getTransaction().begin();
         try {
-            em.remove(currency);
+            em.remove(rate);
             em.getTransaction().commit();
         } catch (Exception ex) {
             em.getTransaction().rollback();

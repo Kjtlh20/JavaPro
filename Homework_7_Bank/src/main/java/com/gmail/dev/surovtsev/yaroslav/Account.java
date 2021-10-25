@@ -13,23 +13,25 @@ public class Account {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "currency_id")
     private Currency currency;
 
-    @Column(nullable = false)
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Column(nullable = false)
+    private Double amount;
 
     public Account() {
     }
 
-    public Account(String name, Currency currency, User user) {
+    public Account(String name, Currency currency, User user, Double amount) {
         this.name = name;
         this.currency = currency;
         this.user = user;
+        this.amount = amount;
     }
 
     public Long getId() {
@@ -62,6 +64,14 @@ public class Account {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
     @Override
