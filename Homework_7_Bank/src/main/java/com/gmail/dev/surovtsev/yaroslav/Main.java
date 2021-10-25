@@ -44,5 +44,18 @@ public class Main {
         AbstractDAO<Transaction> transactionDAO = new TransactionDAOImpl();
         transactionDAO.add(transaction1);
         transactionDAO.add(transaction2);
+
+        BankOperations bankOperations = new BankOperations(account1, 100.0);
+        bankOperations.topUp();
+        System.out.println("account1 Amount: " + account1.getAmount());
+
+        bankOperations = new BankOperations(account3, account1, 100.0);
+        bankOperations.transferBetweenAccounts();
+        System.out.println("account1 Amount: " + account1.getAmount());
+        System.out.println("account3 Amount: " + account3.getAmount());
+
+        bankOperations = new BankOperations();
+        Double amountUser = bankOperations.getAmountUser(user1);
+        System.out.println("amount user1: " + amountUser);
     }
 }

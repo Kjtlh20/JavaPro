@@ -13,6 +13,8 @@ public class Account {
     @Column(nullable = false)
     private String name;
 
+    private String number;
+
     @ManyToOne
     @JoinColumn(name = "currency_id")
     private Currency currency;
@@ -48,6 +50,14 @@ public class Account {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public Currency getCurrency() {
