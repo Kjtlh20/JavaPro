@@ -7,7 +7,7 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
-public class AccountDAOImpl implements AccountDAO {
+public class AccountDAOImpl implements AbstractDAO<Account> {
     private EntityManagerFactory emf;
     private EntityManager em;
 
